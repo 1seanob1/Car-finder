@@ -1,36 +1,59 @@
 import nltk
 import operator
+models=dict()
+modelWithCont=dict()
 cont=dict()
-total=0
+totalPatterns=0
+totalMatches=0
 def tokenize(fName):
     f=open(fName)
     text=f.read()
     tokens=nltk.word_tokenize(text)
     context(tokens)
 def context(tokens):
-    global total
-    global cont
-    models=["Mustang","Camry","Impreza","Silverado"]
+    global totalPatterns, totalMatches
+    global cont, modelWithCont, models
+    models={"Mustang" : 0 ,"Camry" : 0 ,"Impreza" : 0 ,"Silverado" : 0}
     i=0
     for tok in tokens:
         if(tok in models):
+            #increase the count of this token
+            models[tok]+=1
+            totalMatches+=1
+            #tTup & tList is a temporary tuple that
+            #will be used to map only the context to its count
             tlist=[]
             tTup=()
+            #tmatchTup & tmatchlist is a temporary tuple that
+            #will be used to map
+            # the whole match to its count
+            tMatchList=[]
+            tMatchTup=()
             j=-2
             while(j<3):
                 if(j!=0):
                     tlist.append(tokens[i+j])
+                    tMatchList.append(tokens[i+j])
+                else:
+                    #add the match to the tMatchList
+                    tMatchList.append(tokens[i])
                 j+=1
                 tTup=tuple(tlist)
+                tMatchTup=tuple(tMatchList)
             if(cont.has_key(tTup)):
                 cont[tTup]+=1
             else:
                 cont[tTup]=1
-            total+=1
+            if(modelWithCont.has_key(tMatchTup)):
+                modelWithCont[tMatchTup]+=1
+            else:
+                modelWithCont[tMatchTup]=1
+            totalPatterns+=1
         i+=1
+    return cont
 def topPatterns():
-    global cont
-    global total
+    global cont, models,modelWithCont
+    global totalMatches, totalPatterns
     #http://stackoverflow.com/questions/613183/sort-a-python-dictionary-by-value
     sorted_cont=sorted(cont.items(), key=operator.itemgetter(1))
     return sorted_cont[len(sorted_cont)-1]
