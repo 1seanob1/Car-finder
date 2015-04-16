@@ -10,7 +10,7 @@ def getFiles(dirName):
 	files2=[]
 	for f in files:
 		if(isfile(join(dirName,f))):
-                        itr=jRead(f,itr)
+                        itr=jRead(dirName,f,itr)
 def write(text,itr):
         f=open("./data/"+str(itr),"w")
         f.write(text)
@@ -19,9 +19,10 @@ def write(text,itr):
 def get(html,itr):
         #http://stackoverflow.com/questions/645312/what-is-the-quickest-way-to-http-get-in-python
         write(urllib2.urlopen("http://"+html).read(),itr)
-def jRead(fname,itr):
+def jRead(dirName,fname,itr):
 #http://stackoverflow.com/questions/2835559/parsing-values-from-a-json-file-in-python
-        with open(fname) as json_data:
+        print dirName
+        with open(join(dirName+"/",fname)) as json_data:
                 data=json.load(json_data)
         for x in data:
                 get(fname+x["link"][0],itr)
