@@ -5,17 +5,19 @@ modelWithCont=dict()
 cont=dict()
 totalPatterns=0
 totalMatches=0
+total=0
 def tokenize(fName):
     f=open(fName)
     text=f.read()
     tokens=nltk.word_tokenize(text)
     context(tokens)
 def context(tokens):
-    global totalPatterns, totalMatches
+    global totalPatterns, totalMatches,total
     global cont, modelWithCont, models
     models={"Mustang" : 0 ,"Camry" : 0 ,"Impreza" : 0 ,"Silverado" : 0}
     i=0
     for tok in tokens:
+        total+=1
         if(tok in models):
             #increase the count of this token
             models[tok]+=1
@@ -53,10 +55,15 @@ def context(tokens):
     return cont
 def topPatterns():
     global cont, models,modelWithCont
-    global totalMatches, totalPatterns
+    global totalMatches, totalPatterns,total
+    PatternPmi(cont,totalMatches,total)
     #http://stackoverflow.com/questions/613183/sort-a-python-dictionary-by-value
     sorted_cont=sorted(cont.items(), key=operator.itemgetter(1))
     return sorted_cont[len(sorted_cont)-1]
+def PatternPmi(pattern,totalMatches,size):
+    for key in pattern.keys():
+        pattern[key]=(pattern[key]*size)/(pattern[key]*totalMatches)
+               
 def main():
     ii=0
     while(ii<100):
