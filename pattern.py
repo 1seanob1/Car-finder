@@ -2,7 +2,7 @@ import nltk
 import tokenizer
 import re
 
-folder = 'data/'
+folder = 'data2/'
 goldStandard=dict()
 modelCount = dict()
 gold = list()
@@ -10,7 +10,7 @@ def countPattern():
 	global goldStandard, gold, modelCount
 	#loop
 	print "Tokenize"
-	for ii in range (0,99):
+	for ii in range (0,376):
 		#tokenize
 		tokenizer.tokenize(folder+str(ii))		
 		#toppatterns
@@ -18,7 +18,7 @@ def countPattern():
 	gold = list(goldStandard) 
 	print "Got Gold"  
 	print gold   
-	for ii in range (0,99):
+	for ii in range (0,376):
 		
 		fo = open(folder+str(ii), "r")
 		lines = fo.read()
@@ -30,11 +30,12 @@ def countPattern():
 		for element in m:
 			temp = element.split()
 			model = temp[2]
+			#count		
 			if modelCount.has_key(model):
-				modelCount[model] = 0
+				modelCount[model]+= 1
 			else:
-				modelCount[model]+=1
-		#count
+				modelCount[model]= 1
+		
 		#nextfile
 
 
