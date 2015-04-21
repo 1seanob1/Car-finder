@@ -4,6 +4,7 @@ import re
 
 folder = 'data2/'
 goldStandard=dict()
+modelCount_wMatch = dict()
 modelCount = dict()
 gold = list()
 def countPattern():
@@ -16,6 +17,7 @@ def countPattern():
 		#toppatterns
 	goldStandard = tokenizer.topPatterns()
 	gold = list(goldStandard) 
+	
 	print "Got Gold"  
 	print gold   
 	for ii in range (0,376):
@@ -31,10 +33,17 @@ def countPattern():
 			temp = element.split()
 			model = temp[2]
 			#count		
-			if modelCount.has_key(model):
-				modelCount[model]+= 1
+			if modelCount_wMatch.has_key(model):
+				modelCount_wMatch[model]+= 1
 			else:
-				modelCount[model]= 1
+				modelCount_wMatch[model]= 1
+		
+		for model in modelCount_wMatch: 
+			#print model
+			found = re.findall(model, lines)
+			
+			print count
+		modelCount = count
 		
 		#nextfile
 
@@ -42,6 +51,8 @@ def countPattern():
 
 countPattern()
 print modelCount
+print modelCount_wMatch
+
 #print tokenizer.cont
 #print gold[0]
 
