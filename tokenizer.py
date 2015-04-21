@@ -1,26 +1,24 @@
 import nltk
 import operator
-models=dict()
-modelWithCont=dict()
-cont=dict()
-totalPatterns=0
-totalMatches=0
-total=0
+import re
+tokens=[]
 def tokenize(fName):
+    global tokens
     f=open(fName)
     text=f.read()
-    tokens=nltk.word_tokenize(text)
-    context(tokens)
-def context(tokens):
-    global totalPatterns, totalMatches,total
-    global cont, modelWithCont, models
-    models={"Mustang" : 0 ,"Camry" : 0 ,"Impreza" : 0 ,"Silverado" : 0}
+    tok=nltk.word_tokenize(text)
+    for tk in tok:
+        tokens.append(tk)
+#    context(tokens)
+def context(models):
+    global tokens
+    print models
+    cont=dict()
+    totalMatches=0
     i=0
     for tok in tokens:
-        total+=1
+        print tok
         if(tok in models):
-            #increase the count of this token
-            models[tok]+=1
             totalMatches+=1
             #tTup & tList is a temporary tuple that
             #will be used to map only the context to its count
@@ -29,49 +27,92 @@ def context(tokens):
             #tmatchTup & tmatchlist is a temporary tuple that
             #will be used to map
             # the whole match to its count
-            tMatchList=[]
-            tMatchTup=()
             j=-2
             while(j<3):
+                # j==0 means the word we matched
                 if(j!=0):
                     tlist.append(tokens[i+j])
-                    tMatchList.append(tokens[i+j])
-                else:
-                    #add the match to the tMatchList
-                    tMatchList.append(tokens[i])
                 j+=1
                 tTup=tuple(tlist)
-                tMatchTup=tuple(tMatchList)
             if(cont.has_key(tTup)):
                 cont[tTup]+=1
             else:
                 cont[tTup]=1
-            if(modelWithCont.has_key(tMatchTup)):
-                modelWithCont[tMatchTup]+=1
-            else:
-                modelWithCont[tMatchTup]=1
-            totalPatterns+=1
         i+=1
-    return cont
-def topPatterns():
-    global cont, models,modelWithCont
-    global totalMatches, totalPatterns,total
-    PatternPmi(cont,totalMatches,total)
+    ret=list()
+    print cont
+    print totalMatches
+    ret.append(cont)
+    ret.append(totalMatches)
+    return ret
+def topModelPatterns(models):
+    global tokens
+    if(len(models)==0):
+        models=["Mustang" ,"Camry" ,"Impreza" ,"Silverado" ]
+    cont=dict()
+    totalMatches=0
+    total=0
+    ii=0
+    if(len(tokens)==0):
+        while(ii<100):
+            tokenize("./data/"+str(ii))
+            ii+=1
+    ret=context(models)
+    totalMatches=ret[1]
+    cont=ret[0]
+    print cont
+    PatternPmi(cont,totalMatches,len(tokens))
     #http://stackoverflow.com/questions/613183/sort-a-python-dictionary-by-value
     sorted_cont=sorted(cont.items(), key=operator.itemgetter(1))
+    print sorted_cont
     return sorted_cont[len(sorted_cont)-1]
+
 def PatternPmi(pattern,totalMatches,size):
+    print totalMatches
     for key in pattern.keys():
-        pattern[key]=(pattern[key]*size)/(pattern[key]*totalMatches)
-               
+        print key
+        pattern[key]=(pattern[key]*size)/(totalPattern(key)*totalMatches)
+def MatchPmi(models_pattern,N,matches,model_total):
+    return((models_pattern*N)/(matches*model_total))
+def totalPattern(key):
+    count=0
+    for ii in range (0,99):
+        fo = open("./data/"+str(ii), "r")
+        lines = fo.read()
+       # print lines
+        m = re.findall(key[0]+ '\s*' + key[1] + '\s*\w+\s*'+ key[2] + '\s*'+ key[3], lines)
+       # print m
+        count+=len(m)
+    return count
+def yearTag(patternDict):
+    for key in patternDict.keys():
+        ii=0
+        for word in key:
+            try:
+                int(word)
+                if(int(word)>1900 and int(word) <2016):
+                    #print "year is "+word
+                    tList=[]
+                    tupl=()
+                    jj=0
+                    for word2 in key :
+                        #print str(jj)+","+str(ii)
+                        if(jj==ii):
+                            tList.append("YEAR")
+                        else:
+                            tList.append(word2)
+                        jj+=1
+                    tupl=tuple(tList)
+                    value=patternDict[key]
+                    del patternDict[key]
+                    patternDict[tupl]=value
+                    break
+            except:
+                pass
+            ii+=1
+    #print patternDict
+    return patternDict
 def main():
-    ii=0
-    while(ii<100):
-        tokenize("./data/"+str(ii))
-        ii+=1
-    if cont:
-        print cont
-    print "\n"
-    print topPatterns()
+    print topModelPatterns(list())
 if __name__ == "__main__":
     main()
