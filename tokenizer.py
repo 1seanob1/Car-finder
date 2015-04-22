@@ -2,6 +2,18 @@ import nltk
 import operator
 import re
 tokens=[]
+def findToken(tok,nFiles):
+    count=0
+    for ii in range (0,nFiles):
+        fo = open("./data/"+str(ii), "r")
+        lines = fo.read()
+       # print lines
+        m = re.findall(tok, lines)
+       # print m
+        count+=len(m)
+    return count
+def tokenLen():
+    return len(tokens)
 def tokenize(fName):
     global tokens
     f=open(fName)
@@ -12,12 +24,12 @@ def tokenize(fName):
 #    context(tokens)
 def context(models):
     global tokens
-    print models
+#    print models
     cont=dict()
     totalMatches=0
     i=0
     for tok in tokens:
-        print tok
+        #print tok
         if(tok in models):
             totalMatches+=1
             #tTup & tList is a temporary tuple that
@@ -40,12 +52,12 @@ def context(models):
                 cont[tTup]=1
         i+=1
     ret=list()
-    print cont
-    print totalMatches
+    #print cont
+    #print totalMatches
     ret.append(cont)
     ret.append(totalMatches)
     return ret
-def topModelPatterns(models):
+def topModelPatterns(models,nFiles):
     global tokens
     if(len(models)==0):
         models=["Mustang" ,"Camry" ,"Impreza" ,"Silverado" ]
@@ -54,7 +66,7 @@ def topModelPatterns(models):
     total=0
     ii=0
     if(len(tokens)==0):
-        while(ii<100):
+        while(ii<=nFiles):
             tokenize("./data/"+str(ii))
             ii+=1
     ret=context(models)
@@ -71,12 +83,12 @@ def PatternPmi(pattern,totalMatches,size):
     print totalMatches
     for key in pattern.keys():
         print key
-        pattern[key]=(pattern[key]*size)/(totalPattern(key)*totalMatches)
+        pattern[key]=(pattern[key]*size)/(totalPattern(key,99)*totalMatches)
 def MatchPmi(models_pattern,N,matches,model_total):
     return((models_pattern*N)/(matches*model_total))
-def totalPattern(key):
+def totalPattern(key,nFiles):
     count=0
-    for ii in range (0,99):
+    for ii in range (0,nFiles):
         fo = open("./data/"+str(ii), "r")
         lines = fo.read()
        # print lines

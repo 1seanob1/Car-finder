@@ -19,7 +19,7 @@ def countPattern():
 		#tokenize
 #		tokenizer.tokenize(folder+str(ii))		
 		#toppatterns
-	goldStandard = tokenizer.topModelPatterns(list())
+	goldStandard = tokenizer.topModelPatterns(list(),99)
 	gold = list(goldStandard) 
 	
 	print "Got Gold"  
@@ -47,10 +47,7 @@ def countPattern():
 				modelCount_wMatch[model]= 1
 		#nextfile
         for model in modelCount_wMatch: 
-                #print model
-                found = re.findall(model, lines)
-                modelCount_wMatch[model]=tokenizer.MatchPmi(modelCount_wMatch[model],tokenizer.tokenLen(),totalMatch,len(found))
-        
+                modelCount_wMatch[model]=tokenizer.MatchPmi(modelCount_wMatch[model],tokenizer.tokenLen(),totalMatch,tokenizer.findToken(model,99))
         print modelCount_wMatch
 		
 
