@@ -21,6 +21,7 @@ def tokenize(fName):
     text=f.read()
     #    tok=nltk.word_tokenize(text)
     tok=text.split()
+    tok=tokenYearTag(tok)
     for tk in tok:
         tokens.append(tk)
 #    context(tokens)
@@ -61,6 +62,7 @@ def context(models):
     return ret
 def topModelPatterns(models,nFiles, nPatterns):
     global tokens        
+    print tokens
     cont=dict()
     totalMatches=0
     total=0
@@ -72,6 +74,7 @@ def topModelPatterns(models,nFiles, nPatterns):
     ret=context(models)
     totalMatches=ret[1]
     cont=ret[0]
+    cont=yearTag(cont)
     #print cont
     PatternPmi(cont,totalMatches,len(tokens),nFiles)
 
@@ -132,6 +135,16 @@ def yearTag(patternDict):
             ii+=1
     #print patternDict
     return patternDict
+def tokenYearTag(tokens):
+    i=0
+    for tok in tokens:
+        try:
+            if(int(tok)>1900 and int(tok) <2016):
+                tokens[i]="YEAR"
+        except:
+            pass
+        i+=1
+    return tokens
 def main():
     print topModelPatterns(list())
 if __name__ == "__main__":
