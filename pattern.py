@@ -8,6 +8,15 @@ goldStandard=dict()
 modelCount = dict()
 gold = list()
 models={"Civic" : 0 ,"Camry" : 0 ,"Impreza" : 0 ,"Silverado" : 0,"Tahoe" : 0, "GTI" : 0, "Corolla" : 0 }
+def getTopPattern(patterns):
+        max=0
+        topKey=list()
+        maxm=0
+        for keys in patterns.keys():
+                if(patterns[keys]>maxm and (keys not in gold) ):
+                        maxm=patterns[keys]
+                        topKey=keys
+        gold.append(topKey)
 def countPattern(nFiles):
 
         #totalMatch is the total number of times any pattern is found in the data
@@ -26,11 +35,11 @@ def countPattern(nFiles):
 
         ###
 	tempPattern = tokenizer.topModelPatterns(temp,nFiles,1)
+        getTopPattern(tempPattern)
         #add top pattern to goldStandard of patterns
-        for pattern in tempPattern:
-                gold.append(pattern)
-        ###
+        print "$$$"
         print gold
+        print"$$$"
         # gold   
 	for ii in range (0,nFiles):		
 		fo = open(folder+str(ii), "r")
@@ -56,20 +65,20 @@ def countPattern(nFiles):
                                         except:
                                                 pass
 		#nextfile
-        print modelCount_wMatch
+        #print modelCount_wMatch
         for model in modelCount_wMatch: 
                 modelCount_wMatch[model]=tokenizer.MatchPmi(modelCount_wMatch[model],tokenizer.tokenLen(),totalMatch,tokenizer.findToken(model,nFiles))
 
         #remove models below pmi threshold
         maxm=0
         maxModel=""
-        print"modelcountwmatch="
-        print modelCount_wMatch
+        #print"modelcountwmatch="
+        #print modelCount_wMatch
         for key in modelCount_wMatch.keys():
-                if(modelCount_wMatch[key]>maxm and key not in models):
+                if(modelCount_wMatch[key]>maxm and (key not in models)):
                         maxm=modelCount_wMatch[key]
                         maxModel=key
-        print maxModel+"="+str(maxm)
+        #print maxModel+"="+str(maxm)
         models[maxModel]=maxm
 
 for ii in range(5):

@@ -1,6 +1,7 @@
 import nltk
 import operator
 import re
+#import pattern
 tokens=[]
 def findToken(tok,nFiles):
     count=0
@@ -73,19 +74,10 @@ def topModelPatterns(models,nFiles, nPatterns):
     cont=ret[0]
     #print cont
     PatternPmi(cont,totalMatches,len(tokens),nFiles)
-    sorted_cont=list()
-    max=0
-    topKey=list()
-    for keys in cont.keys():
-        if(cont[keys]>max):
-            max=cont[keys]
-            topKey=keys
-    sorted_cont.append(topKey)
-   # print "###"
-    #print sorted_cont
-    #yprint "###"
-    print "sorted cont="+str( sorted_cont)
-    return sorted_cont
+
+        #    print "sorted cont="+str( sorted_cont)
+    return cont
+
 
 def PatternPmi(pattern,totalMatches,size,nFiles):
     #print totalMatches
