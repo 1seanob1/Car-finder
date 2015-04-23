@@ -73,7 +73,7 @@ def topModelPatterns(models,nFiles, nPatterns):
     totalMatches=ret[1]
     cont=ret[0]
     print cont
-    PatternPmi(cont,totalMatches,len(tokens))
+    PatternPmi(cont,totalMatches,len(tokens),nFiles)
     sorted_cont=list()
     for ii in range(nPatterns):
         max=0
@@ -89,11 +89,14 @@ def topModelPatterns(models,nFiles, nPatterns):
     #yprint "###"
     return sorted_cont
 
-def PatternPmi(pattern,totalMatches,size):
+def PatternPmi(pattern,totalMatches,size,nFiles):
     print totalMatches
     for key in pattern.keys():
-        print key
-        pattern[key]=(pattern[key]*size)/(totalPattern(key,99)*totalMatches)
+        tp=totalPattern(key,nFiles)
+        if(tp== 0 or totalMatches==0):
+            pattern[key]=0
+        else:
+            pattern[key]=(pattern[key]*size)/(tp * totalMatches)
 def MatchPmi(models_pattern,N,matches,model_total):
     if(matches==0 or model_total==0):
         return 0
