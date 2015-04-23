@@ -60,7 +60,7 @@ def context(models):
 def topModelPatterns(models,nFiles, nPatterns):
     global tokens
     if(len(models)==0):
-        models=["Mustang" ,"Camry" ,"Impreza" ,"Silverado","Tahoe" ]
+        models=["Civic" ,"Camry" ,"Impreza" ,"Silverado","Tahoe", "GTI", "Corolla" ]
     cont=dict()
     totalMatches=0
     total=0
@@ -108,11 +108,9 @@ def totalPattern(key,nFiles):
         fo = open("./data/"+str(ii), "r")
         lines = fo.read()
         # print lines
-        re.escape(key[0])
-        re.escape(key[1])
-        re.escape(key[2])
-        re.escape(key[3])
-        m = re.findall(key[0]+ "\s*" + key[1] + "\s*\w+\s*" + key[2] + "\s*"+ key[3], lines)
+               
+	print key
+        m = re.findall(re.escape(key[0])+ "\s*" + re.escape(key[1]) + "\s*\w+\s*" + re.escape(key[2]) + "\s*"+ re.escape(key[3]), lines)
        # print m
         count+=len(m)
     return count
