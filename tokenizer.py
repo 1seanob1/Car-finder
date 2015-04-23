@@ -40,7 +40,7 @@ def context(models):
             #will be used to map
             # the whole match to its count
             j=-2
-            while(j<3):
+            while(j<len(models)):
                 # j==0 means the word we matched
                 if(j!=0):
                     tlist.append(tokens[i+j])
