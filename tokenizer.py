@@ -107,7 +107,11 @@ def totalPattern(key,nFiles):
     for ii in range (0,nFiles):
         fo = open("./data/"+str(ii), "r")
         lines = fo.read()
-       # print lines
+        # print lines
+        re.escape(key[0])
+        re.escape(key[1])
+        re.escape(key[2])
+        re.escape(key[3])
         m = re.findall(key[0]+ "\s*" + key[1] + "\s*\w+\s*" + key[2] + "\s*"+ key[3], lines)
        # print m
         count+=len(m)
