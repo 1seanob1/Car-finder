@@ -15,12 +15,12 @@ def countPattern():
 	global goldStandard, gold, modelCount
 	#loop
 	print "Tokenize"
-	goldStandard = tokenizer.topModelPatterns(list(),99,7)
+	goldStandard = tokenizer.topModelPatterns(list(),376,7)
 	gold = list(goldStandard) 
 	
 	print "Got Gold"  
 #	print gold   
-	for ii in range (0,99):
+	for ii in range (0,376):
 		
 		fo = open(folder+str(ii), "r")
 		lines = fo.read()
@@ -42,7 +42,7 @@ def countPattern():
                                         modelCount_wMatch[model]= 1
 		#nextfile
         for model in modelCount_wMatch: 
-                modelCount_wMatch[model]=tokenizer.MatchPmi(modelCount_wMatch[model],tokenizer.tokenLen(),totalMatch,tokenizer.findToken(model,99))
+                modelCount_wMatch[model]=tokenizer.MatchPmi(modelCount_wMatch[model],tokenizer.tokenLen(),totalMatch,tokenizer.findToken(model,376))
         print modelCount_wMatch
 		
 
