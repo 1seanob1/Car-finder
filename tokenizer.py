@@ -57,7 +57,7 @@ def context(models):
     ret.append(cont)
     ret.append(totalMatches)
     return ret
-def topModelPatterns(models,nFiles):
+def topModelPatterns(models,nFiles, nPatterns):
     global tokens
     if(len(models)==0):
         models=["Mustang" ,"Camry" ,"Impreza" ,"Silverado" ]
@@ -74,10 +74,20 @@ def topModelPatterns(models,nFiles):
     cont=ret[0]
     print cont
     PatternPmi(cont,totalMatches,len(tokens))
-    #http://stackoverflow.com/questions/613183/sort-a-python-dictionary-by-value
-    sorted_cont=sorted(cont.items(), key=operator.itemgetter(1))
-    print sorted_cont
-    return sorted_cont[len(sorted_cont)-1]
+    sorted_cont=list()
+    for ii in range(nPatterns):
+        max=0
+        topKey=list()
+        for keys in cont.keys():
+            if(cont[keys]>max):
+                max=cont[keys]
+                topKey=keys
+        del cont[topKey]
+        sorted_cont.append(topKey)
+   # print "###"
+    #print sorted_cont
+    #yprint "###"
+    return sorted_cont
 
 def PatternPmi(pattern,totalMatches,size):
     print totalMatches
