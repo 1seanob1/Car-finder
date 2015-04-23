@@ -18,7 +18,8 @@ def tokenize(fName):
     global tokens
     f=open(fName)
     text=f.read()
-    tok=nltk.word_tokenize(text)
+    #    tok=nltk.word_tokenize(text)
+    tok=text.split()
     for tk in tok:
         tokens.append(tk)
 #    context(tokens)
@@ -58,10 +59,7 @@ def context(models):
     ret.append(totalMatches)
     return ret
 def topModelPatterns(models,nFiles, nPatterns):
-    global tokens
-    if(len(models)==0):
-        models=["Civic" ,"Camry" ,"Impreza" ,"Silverado","Tahoe", "GTI", "Corolla" ]
-    print models
+    global tokens        
     cont=dict()
     totalMatches=0
     total=0
@@ -76,18 +74,17 @@ def topModelPatterns(models,nFiles, nPatterns):
     #print cont
     PatternPmi(cont,totalMatches,len(tokens),nFiles)
     sorted_cont=list()
-    for ii in range(nPatterns):
-        max=0
-        topKey=list()
-        for keys in cont.keys():
-            if(cont[keys]>max):
-                max=cont[keys]
-                topKey=keys
-        del cont[topKey]
-        sorted_cont.append(topKey)
+    max=0
+    topKey=list()
+    for keys in cont.keys():
+        if(cont[keys]>max):
+            max=cont[keys]
+            topKey=keys
+    sorted_cont.append(topKey)
    # print "###"
     #print sorted_cont
     #yprint "###"
+    print "sorted cont="+str( sorted_cont)
     return sorted_cont
 
 def PatternPmi(pattern,totalMatches,size,nFiles):

@@ -4,31 +4,35 @@ import re
 
 folder = 'data/'
 goldStandard=dict()
-modelCount_wMatch = dict()
+
 modelCount = dict()
 gold = list()
-
+models={"Civic" : 0 ,"Camry" : 0 ,"Impreza" : 0 ,"Silverado" : 0,"Tahoe" : 0, "GTI" : 0, "Corolla" : 0 }
 def countPattern(nFiles):
+
         #totalMatch is the total number of times any pattern is found in the data
         totalMatch=0
         #totalModel is the total number of times a particular model/key is found in the text, regardless of patterns
         totalModel=0
-	global goldStandard, gold, modelCount,modelCount_wMatch
+	global goldStandard, gold, modelCount,models
 	print "Tokenize"
+        modelCount_wMatch = dict()
         #get list of keys from modelCount_wMatch to feed to topModelPatterns
         ###
         temp=list()
-        for key in modelCount_wMatch:
+        for key in models:
                 temp.append(key)
         ###
-	goldStandard = tokenizer.topModelPatterns(temp,nFiles,7)
-        del temp
-	gold = list(goldStandard) 
-	
-	print "Got Gold"  
-#	print gold   
-	for ii in range (0,nFiles):
-		
+
+        ###
+	tempPattern = tokenizer.topModelPatterns(temp,nFiles,1)
+        #add top pattern to goldStandard of patterns
+        for pattern in tempPattern:
+                gold.append(pattern)
+        ###
+        print gold
+        # gold   
+	for ii in range (0,nFiles):		
 		fo = open(folder+str(ii), "r")
 		lines = fo.read()
 		#find_match
@@ -52,22 +56,25 @@ def countPattern(nFiles):
                                         except:
                                                 pass
 		#nextfile
+        print modelCount_wMatch
         for model in modelCount_wMatch: 
                 modelCount_wMatch[model]=tokenizer.MatchPmi(modelCount_wMatch[model],tokenizer.tokenLen(),totalMatch,tokenizer.findToken(model,nFiles))
 
         #remove models below pmi threshold
+        maxm=0
+        maxModel=""
+        print"modelcountwmatch="
+        print modelCount_wMatch
         for key in modelCount_wMatch.keys():
-                if(modelCount_wMatch[key]<100):
-                        del modelCount_wMatch[key]
-                        
-        return modelCount_wMatch
+                if(modelCount_wMatch[key]>maxm and key not in models):
+                        maxm=modelCount_wMatch[key]
+                        maxModel=key
+        print maxModel+"="+str(maxm)
+        models[maxModel]=maxm
 
-		
-
-models=list()
 for ii in range(5):
-        models=countPattern(99)
-print modelCount_wMatch
+        countPattern(99)
+print models
 
 #print tokenizer.cont
 #print gold[0]
