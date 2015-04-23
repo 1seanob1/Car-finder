@@ -61,6 +61,7 @@ def topModelPatterns(models,nFiles, nPatterns):
     global tokens
     if(len(models)==0):
         models=["Civic" ,"Camry" ,"Impreza" ,"Silverado","Tahoe", "GTI", "Corolla" ]
+    print models
     cont=dict()
     totalMatches=0
     total=0
@@ -72,7 +73,7 @@ def topModelPatterns(models,nFiles, nPatterns):
     ret=context(models)
     totalMatches=ret[1]
     cont=ret[0]
-    print cont
+    #print cont
     PatternPmi(cont,totalMatches,len(tokens),nFiles)
     sorted_cont=list()
     for ii in range(nPatterns):
@@ -90,7 +91,7 @@ def topModelPatterns(models,nFiles, nPatterns):
     return sorted_cont
 
 def PatternPmi(pattern,totalMatches,size,nFiles):
-    print totalMatches
+    #print totalMatches
     for key in pattern.keys():
         tp=totalPattern(key,nFiles)
         if(tp== 0 or totalMatches==0):
@@ -109,7 +110,7 @@ def totalPattern(key,nFiles):
         lines = fo.read()
         # print lines
                
-	print key
+	#print key
         m = re.findall(re.escape(key[0])+ "\s*" + re.escape(key[1]) + "\s*\w+\s*" + re.escape(key[2]) + "\s*"+ re.escape(key[3]), lines)
        # print m
         count+=len(m)
