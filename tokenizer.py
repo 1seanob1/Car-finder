@@ -95,7 +95,10 @@ def PatternPmi(pattern,totalMatches,size):
         print key
         pattern[key]=(pattern[key]*size)/(totalPattern(key,99)*totalMatches)
 def MatchPmi(models_pattern,N,matches,model_total):
-    return((models_pattern*N)/(matches*model_total))
+    if(matches==0 or model_total==0):
+        return 0
+    else:
+        return((models_pattern*N)/(matches*model_total))
 def totalPattern(key,nFiles):
     count=0
     for ii in range (0,nFiles):
