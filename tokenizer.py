@@ -40,7 +40,7 @@ def context(models):
             #will be used to map
             # the whole match to its count
             j=-2
-            while(j<len(models)):
+            while(j<3):
                 # j==0 means the word we matched
                 if(j!=0):
                     tlist.append(tokens[i+j])
@@ -60,7 +60,7 @@ def context(models):
 def topModelPatterns(models,nFiles, nPatterns):
     global tokens
     if(len(models)==0):
-        models=["Mustang" ,"Camry" ,"Impreza" ,"Silverado" ]
+        models=["Mustang" ,"Camry" ,"Impreza" ,"Silverado","Tahoe" ]
     cont=dict()
     totalMatches=0
     total=0
@@ -108,7 +108,7 @@ def totalPattern(key,nFiles):
         fo = open("./data/"+str(ii), "r")
         lines = fo.read()
        # print lines
-        m = re.findall(key[0]+ '\s*' + key[1] + '\s*\w+\s*'+ key[2] + '\s*'+ key[3], lines)
+        m = re.findall(key[0]+ "\s*" + key[1] + "\s*\w+\s*" + key[2] + "\s*"+ key[3], lines)
        # print m
         count+=len(m)
     return count
