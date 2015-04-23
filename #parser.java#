@@ -1,0 +1,40 @@
+  private Collection<List<String>> tokenize(String text,AUTHOR author) {
+	  //tokenizer that will break based on delimeters(delims),
+	  //and return the delimeters as well
+	  StringTokenizer tokenizer=new StringTokenizer(text,delims,true);
+	  Collection <List<String>> sentences= new ArrayList<List<String>>();
+	  List<String> sentence= new ArrayList<String>();
+	  String last="";
+	  while(tokenizer.hasMoreTokens()) {
+		  	String tok = tokenizer.nextToken();
+		  	if( (tok.equals(".")  &&
+		  		(!last.equalsIgnoreCase("Mr") && !last.equalsIgnoreCase("Ms") && !last.equalsIgnoreCase("Mrs")))
+		  			|| tok.equals("!") || tok.equals("?")) {
+		  		//System.out.println("conatins period!");
+		  		//add in the finished sentence only if sentence contains something
+		  		if(!sentence.isEmpty()){
+		  			sentences.add(sentence);
+		  			nLines.incrementCount(author, 1.0);
+		  			//make new sentence
+		  			//System.out.println(sentence);
+		  			sentence=new ArrayList<String>();	
+		  		}
+		  	}
+		  	else if(!delims.contains(tok)) {
+		  		//System.out.println(tok);
+		  		sentence.add(tok);
+		  	}
+		  	else{
+		  		//non sentence ending token maybe do stuff here?
+		  		//example +-=[] etc
+		  		assert 1+1==2;
+		  	}
+		  	last=tok;
+	  }
+	  //end of passage add last sentece
+	  sentences.add(sentence);
+	  //r.println("\n\n"+sentences.size()+"\n\n");
+	  //r.println(sentences);
+	  return sentences;
+	  
+	  
