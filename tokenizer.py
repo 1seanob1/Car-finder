@@ -62,7 +62,7 @@ def context(models):
     return ret
 def topModelPatterns(models,nFiles, nPatterns):
     global tokens        
-    print tokens
+#    print tokens
     cont=dict()
     totalMatches=0
     total=0
