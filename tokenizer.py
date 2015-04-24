@@ -2,7 +2,7 @@ import nltk
 import operator
 import re
 #import pattern
-tokens=[]
+tokens=[]    
 def findToken(tok,nFiles):
     count=0
     for ii in range (0,nFiles):
@@ -19,12 +19,19 @@ def tokenize(fName):
     global tokens
     f=open(fName)
     text=f.read()
-    #    tok=nltk.word_tokenize(text)
-    tok=text.split()
+    tok=nltk.word_tokenize(text)
+    #tok=text.split()
     tok=tokenYearTag(tok)
     for tk in tok:
         tokens.append(tk)
 #    context(tokens)
+def exportTokenize(fName):
+    f=open(fName)
+    text=f.read()
+    tok=nltk.word_tokenize(text)
+    #tok=text.split()
+    tok=tokenYearTag(tok)
+    return tok
 def context(models):
     global tokens
 #    print models
@@ -42,8 +49,9 @@ def context(models):
             #tmatchTup & tmatchlist is a temporary tuple that
             #will be used to map
             # the whole match to its count
-            j=-2
-            while(j<3):
+            #HERE DEFINES SIZE OF PATTERN
+            j=-1
+            while(j<2):
                 # j==0 means the word we matched
                 if(j!=0):
                     tlist.append(tokens[i+j])
@@ -97,15 +105,18 @@ def MatchPmi(models_pattern,N,matches,model_total):
         return((models_pattern*N)/(matches*model_total))
 def totalPattern(key,nFiles):
     count=0
-    for ii in range (0,nFiles):
-        fo = open("./data/"+str(ii), "r")
-        lines = fo.read()
-        # print lines
-               
-	#print key
-        m = re.findall(re.escape(key[0])+ "\s*" + re.escape(key[1]) + "\s*\w+\s*" + re.escape(key[2]) + "\s*"+ re.escape(key[3]), lines)
-       # print m
-        count+=len(m)
+    ii=0
+    for tok in tokens:
+        if key[0]==tok:
+            try:
+                if(key[1]==tokens[ii+2]):
+                    count+=1
+            except:
+                   #index out of bounds but I don't care
+                   pass
+                
+        ii+=1
+    # print m
     return count
 def yearTag(patternDict):
     for key in patternDict.keys():
