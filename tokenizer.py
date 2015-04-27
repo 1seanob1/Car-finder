@@ -3,15 +3,11 @@ import operator
 import re
 #import pattern
 tokens=[]    
-def findToken(tok,nFiles):
+def findToken(match):
     count=0
-    for ii in range (0,nFiles):
-        fo = open("./data/"+str(ii), "r")
-        lines = fo.read()
-       # print lines
-        m = re.findall(tok, lines)
-       # print m
-        count+=len(m)
+    for tok in tokens: 
+        if(tok==match):
+            count+=1
     return count
 def tokenLen():
     return len(tokens)
@@ -19,12 +15,15 @@ def tokenize(fName):
     global tokens
     f=open(fName)
     text=f.read()
-    tok=nltk.word_tokenize(text)
-    #tok=text.split()
-    tok=tokenYearTag(tok)
-    for tk in tok:
-        tokens.append(tk)
-#    context(tokens)
+    try:
+        tok=nltk.word_tokenize(text)
+        #tok=text.split()
+        tok=tokenYearTag(tok)
+        for tk in tok:
+            tokens.append(tk)
+        #    context(tokens)
+    except:
+        pass
 def exportTokenize(fName):
     f=open(fName)
     text=f.read()
@@ -99,6 +98,7 @@ def PatternPmi(pattern,totalMatches,size,nFiles):
         else:
             pattern[key]=(pattern[key]*size)/(tp * totalMatches)
 def MatchPmi(models_pattern,N,matches,model_total):
+    #print "matches= "+str(matches)+"\tmodel_total= "+str(model_total)
     if(matches==0 or model_total==0):
         return 0
     else:
@@ -111,10 +111,11 @@ def totalPattern(key,nFiles):
             try:
                 if(key[1]==tokens[ii+2]):
                     count+=1
-            except:
+            except Exception as err:
+                #print err
                    #index out of bounds but I don't care
-                   pass
-                
+                pass
+                   
         ii+=1
     # print m
     return count
